@@ -1,4 +1,4 @@
-// Copyright 2015 SeukWon Kang (kasworld@gmail.com)
+// Copyright 2015,2016,2017,2018,2019 SeukWon Kang (kasworld@gmail.com)
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -12,7 +12,9 @@
 package g2rand
 
 import (
+	"math/rand"
 	"testing"
+	"time"
 )
 
 func TestNormIntRange(t *testing.T) {
@@ -31,4 +33,60 @@ func TestNormIntRange(t *testing.T) {
 	}
 	println(min, max)
 	println(mean-min, max-mean)
+}
+
+func TestIntRange(t *testing.T) {
+	rnd := New()
+	for i := 0; i < 100; i++ {
+		v := rnd.Int31n(100)
+		println(v)
+	}
+}
+
+func BenchmarkNew(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = New()
+	}
+}
+
+func BenchmarkRandom(b *testing.B) {
+	r := New()
+	for i := 0; i < b.N; i++ {
+		_ = r.Intn(100)
+	}
+}
+
+func BenchmarkRandomNolock(b *testing.B) {
+	r := New()
+	for i := 0; i < b.N; i++ {
+		_ = r.IntnNolock(100)
+	}
+}
+
+func BenchmarkRandomInt31n(b *testing.B) {
+	r := New()
+	for i := 0; i < b.N; i++ {
+		_ = r.Int31n(100)
+	}
+}
+
+func BenchmarkSysRandom(b *testing.B) {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < b.N; i++ {
+		_ = r.Intn(100)
+	}
+}
+
+func BenchmarkSourceRandom(b *testing.B) {
+	r := rand.NewSource(time.Now().UnixNano())
+	for i := 0; i < b.N; i++ {
+		_ = r.Int63()
+	}
+}
+
+func BenchmarkSourceRandom64(b *testing.B) {
+	r := rand.NewSource(time.Now().UnixNano()).(rand.Source64)
+	for i := 0; i < b.N; i++ {
+		_ = r.Uint64()
+	}
 }
