@@ -91,6 +91,12 @@ func (rnd *G2Rand) Intn(n int) int {
 	return rnd.IntnNolock(n)
 }
 
+func (rnd *G2Rand) Int63() int64 {
+	rnd.mutex.Lock()
+	defer rnd.mutex.Unlock()
+	return rnd.mr.Int63()
+}
+
 func (rnd *G2Rand) IntnNolock(n int) int {
 	// if n < 1<<31 {
 	// 	return int(rnd.Int31n(int32(n)))
