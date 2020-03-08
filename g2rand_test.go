@@ -38,7 +38,7 @@ func TestNormIntRange(t *testing.T) {
 func TestIntRange(t *testing.T) {
 	rnd := New()
 	for i := 0; i < 100; i++ {
-		v := rnd.Int31n(100)
+		v := rnd.Intn(100)
 		println(v)
 	}
 }
@@ -53,20 +53,6 @@ func BenchmarkRandom(b *testing.B) {
 	r := New()
 	for i := 0; i < b.N; i++ {
 		_ = r.Intn(100)
-	}
-}
-
-func BenchmarkRandomNolock(b *testing.B) {
-	r := New()
-	for i := 0; i < b.N; i++ {
-		_ = r.IntnNolock(100)
-	}
-}
-
-func BenchmarkRandomInt31n(b *testing.B) {
-	r := New()
-	for i := 0; i < b.N; i++ {
-		_ = r.Int31n(100)
 	}
 }
 
