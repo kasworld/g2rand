@@ -85,6 +85,12 @@ func (rnd *G2Rand) Int63() int64 {
 	return rnd.mr.Int63()
 }
 
+func (rnd *G2Rand) Uint32() uint32 {
+	rnd.mutex.Lock()
+	defer rnd.mutex.Unlock()
+	return rnd.mr.Uint32()
+}
+
 func (r *G2Rand) Shuffle(n int, swap func(i, j int)) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
